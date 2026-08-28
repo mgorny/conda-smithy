@@ -741,7 +741,6 @@ def test_secrets(py_recipe, jinja_env):
     )
     with open(config_yaml) as fo:
         config = yaml.safe_load(fo)
-        print(config)
         if "steps" in config:
             any(
                 step.get("env", {}).get("BINSTAR_TOKEN", None) == "$(BINSTAR_TOKEN)"
@@ -2466,7 +2465,6 @@ def test_github_actions_labels(py_recipe, jinja_env, label):
     forge_dir = py_recipe.recipe
     config = copy.deepcopy(py_recipe.config)
     conda_build_yml = Path(forge_dir, ".github/workflows/conda-build.yml")
-    print(conda_build_yml)
 
     config["provider"]["linux_64"] = "github_actions"
     config["provider"]["osx"] = "azure"
