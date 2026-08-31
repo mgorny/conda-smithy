@@ -741,7 +741,6 @@ def test_secrets(py_recipe, jinja_env):
     )
     with open(config_yaml) as fo:
         config = yaml.safe_load(fo)
-        print(config)
         if "steps" in config:
             any(
                 step.get("env", {}).get("BINSTAR_TOKEN", None) == "$(BINSTAR_TOKEN)"
@@ -2466,7 +2465,6 @@ def test_github_actions_labels(py_recipe, jinja_env, label):
     forge_dir = py_recipe.recipe
     config = copy.deepcopy(py_recipe.config)
     conda_build_yml = Path(forge_dir, ".github/workflows/conda-build.yml")
-    print(conda_build_yml)
 
     config["provider"]["linux_64"] = "github_actions"
     config["provider"]["osx"] = "azure"
@@ -2865,7 +2863,7 @@ def test_store_build_artifacts_gha_and_azure_conditions(py_recipe, jinja_env):
 
 
 @pytest.mark.parametrize(
-    "label",
+    "win64_label",
     [
         None,
         "default",
@@ -2876,21 +2874,34 @@ def test_store_build_artifacts_gha_and_azure_conditions(py_recipe, jinja_env):
         "namespace-profile-16cpu-on-win-64",
     ],
 )
-def test_tools_build_paths_gha(py_recipe, jinja_env, label: str):
+@pytest.mark.parametrize("cross", [False, True])
+def test_tools_build_paths_gha(py_recipe, jinja_env, win64_label: str, cross: bool):
     forge_dir = py_recipe.recipe
     forge_yml = Path(forge_dir, "conda-forge.yml")
 
     with open(forge_yml, "a") as f:
+        if cross:
+            f.write(textwrap.dedent("""\
+                build_platform:
+                  linux_64: win_64
+                  osx_arm64: win_arm64
+                  win_arm64: osx_arm64
+                  win_64: linux_64
+            """))
         f.write(textwrap.dedent("""\
             provider:
               linux_64: github_actions
-              osx_64: github_actions
+              osx_64: null
+              osx_arm64: github_actions
               win_arm64: github_actions
               win_64: github_actions
         """))
-    if label:
+    if win64_label:
+        win64_builder = "linux64" if cross else "win64"
         with open(py_recipe.config["exclusive_config_file"], "a") as f:
-            f.write(f"\ngithub_actions_labels:\n  - {label}  # [win64]\n")
+            f.write(
+                f"\ngithub_actions_labels:\n  - {win64_label}  # [{win64_builder}]\n"
+            )
 
     config = configure_feedstock._load_forge_config(
         forge_dir, "recipe/default_config.yaml"
@@ -2905,20 +2916,25 @@ def test_tools_build_paths_gha(py_recipe, jinja_env, label: str):
     with conda_build_yml.open() as f:
         workflow = yaml.safe_load(f)
 
+    target_built_on_linux_64 = "win_64" if cross else "linux_64"
+    target_built_on_osx_arm64 = "win_arm64" if cross else "osx_arm64"
+    target_built_on_win_64 = "linux_64" if cross else "win_64"
+    target_built_on_win_arm64 = "osx_arm64" if cross else "win_arm64"
+
     expected = {
-        "macos-15-intel": ("~/miniforge3", "~/miniforge3/conda-bld"),
-        "ubuntu-latest": ("~/miniforge3", "build_artifacts"),
-        "windows-11-arm": (r"C:\Miniforge", r"C:\\bld\\"),
+        target_built_on_linux_64: ("~/miniforge3", "build_artifacts"),
+        target_built_on_osx_arm64: ("~/miniforge3", "~/miniforge3/conda-bld"),
+        target_built_on_win_arm64: (r"C:\Miniforge", r"C:\\bld\\"),
+        target_built_on_win_64: (
+            (r"C:\Miniforge", r"C:\\bld\\")
+            if (win64_label or "").startswith("blacksmith")
+            else (r"D:\Miniforge", r"D:\\bld\\")
+        ),
     }
-    expected_label = "windows-2022" if label in (None, "default", "hosted") else label
-    if expected_label.startswith("blacksmith"):
-        expected[expected_label] = (r"C:\Miniforge", r"C:\\bld\\")
-    else:
-        expected[expected_label] = (r"D:\Miniforge", r"D:\\bld\\")
 
     matrix = workflow["jobs"]["build"]["strategy"]["matrix"]["include"]
     assert {
-        " ".join(entry["runs_on"]): (
+        "_".join(entry["CONFIG"].split("_")[:2]): (
             entry["tools_install_dir"],
             entry["build_workspace_dir"],
         )
@@ -2926,15 +2942,25 @@ def test_tools_build_paths_gha(py_recipe, jinja_env, label: str):
     } == expected
 
 
-def test_tools_build_paths_azure(py_recipe, jinja_env):
+@pytest.mark.parametrize("cross", [False, True])
+def test_tools_build_paths_azure(py_recipe, jinja_env, cross: bool):
     forge_dir = py_recipe.recipe
     forge_yml = Path(forge_dir, "conda-forge.yml")
 
     with open(forge_yml, "a") as f:
+        if cross:
+            f.write(textwrap.dedent("""\
+                build_platform:
+                  linux_64: win_64
+                  osx_arm64: win_arm64
+                  win_arm64: osx_arm64
+                  win_64: linux_64
+            """))
         f.write(textwrap.dedent("""\
             provider:
               linux_64: azure
-              osx_64: azure
+              osx_64: null
+              osx_arm64: azure
               win_arm64: azure
               win_64: azure
         """))
@@ -2948,16 +2974,21 @@ def test_tools_build_paths_azure(py_recipe, jinja_env):
         forge_dir=forge_dir,
     )
 
+    target_built_on_linux_64 = "win_64" if cross else "linux_64"
+    target_built_on_osx_arm64 = "win_arm64" if cross else "osx_arm64"
+    target_built_on_win_64 = "linux_64" if cross else "win_64"
+    target_built_on_win_arm64 = "osx_arm64" if cross else "win_arm64"
+
     expected = {
         "linux": {
-            "linux_64": ("~/miniforge3", "build_artifacts"),
+            target_built_on_linux_64: ("~/miniforge3", "build_artifacts"),
         },
         "osx": {
-            "osx_64": ("~/miniforge3", "~/miniforge3/conda-bld"),
+            target_built_on_osx_arm64: ("~/miniforge3", "~/miniforge3/conda-bld"),
         },
         "win": {
-            "win_64": (r"D:\Miniforge", r"D:\\bld\\"),
-            "win_arm64": (r"C:\Miniforge", r"C:\\bld\\"),
+            target_built_on_win_64: (r"D:\Miniforge", r"D:\\bld\\"),
+            target_built_on_win_arm64: (r"C:\Miniforge", r"C:\\bld\\"),
         },
     }
 

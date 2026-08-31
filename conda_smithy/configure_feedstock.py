@@ -1984,7 +1984,8 @@ def _github_actions_specific_setup(jinja_env, forge_config, forge_dir, platform)
         workflow_settings = get_workflow_settings(
             forge_config["workflow_settings"], "github_actions", data["platform"]
         )
-        on_hosted_runner = {
+        # Note that win-arm64 runners do not have D:
+        on_hosted_win_64_runner = {
             "windows-latest",
             "windows-2022",
             "windows-2025",
@@ -1992,8 +1993,8 @@ def _github_actions_specific_setup(jinja_env, forge_config, forge_dir, platform)
         fill_workflow_settings_defaults(
             workflow_settings,
             "github_actions",
-            data["platform"],
-            "D:" if on_hosted_runner or on_namespace else "C:",
+            platform,
+            "D:" if on_hosted_win_64_runner or on_namespace else "C:",
         )
         data.update(workflow_settings)
         # support scripts are all executable, and may also be templates (for artifact creation)
@@ -2134,7 +2135,7 @@ def _azure_specific_setup(jinja_env, forge_config, forge_dir, platform):
 
         # fmt: off
         workflow_settings = get_workflow_settings(forge_config["workflow_settings"], "azure", data["platform"])
-        fill_workflow_settings_defaults(workflow_settings, "azure", data["platform"], "D:" if data["platform"] == "win-64" else "C:")
+        fill_workflow_settings_defaults(workflow_settings, "azure", platform, "D:" if data["build_platform"] == "win-64" else "C:")
         data.update(workflow_settings)
 
         if platform == "linux":

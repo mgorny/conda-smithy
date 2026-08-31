@@ -364,27 +364,25 @@ def get_workflow_settings(
 def fill_workflow_settings_defaults(
     workflow_settings: dict[str, Any],
     provider: str,
-    platform: str,
+    system: str,
     win_default_drive: str,
 ) -> None:
     """
     Fill the missing entries from `workflow_settings` with defaults for
-    the given provider-platform combination.
+    the given provider-system combination.
     """
 
-    assert "-" in platform
     assert len(win_default_drive) == 2
     assert win_default_drive[1] == ":"
 
-    os = platform.split("-", 1)[0]
     if workflow_settings.get("tools_install_dir") is None:
         workflow_settings["tools_install_dir"] = (
-            rf"{win_default_drive}\Miniforge" if os == "win" else "~/miniforge3"
+            rf"{win_default_drive}\Miniforge" if system == "win" else "~/miniforge3"
         )
     if workflow_settings.get("build_workspace_dir") is None:
         tools_drive = (
             PureWindowsPath(workflow_settings["tools_install_dir"]).drive
-            if os == "win"
+            if system == "win"
             else ""
         )
         workflow_settings["build_workspace_dir"] = {
@@ -394,7 +392,7 @@ def fill_workflow_settings_defaults(
             # https://github.com/conda-forge/conda-forge-ci-setup-feedstock/blob/29b3d39d4c21cd96c6274231f295bacd5c860611/recipe/run_conda_forge_build_setup_win.bat#L32-L42
             # TODO: switch to normalizing all paths once we're ready
             "win": rf"{tools_drive}\\bld\\",
-        }[os]
+        }[system]
 
     simple_defaults = {
         "pagefile_size": 0,
