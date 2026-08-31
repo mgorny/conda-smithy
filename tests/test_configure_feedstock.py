@@ -2916,16 +2916,16 @@ def test_tools_build_paths_gha(py_recipe, jinja_env, win64_label: str, cross: bo
     with conda_build_yml.open() as f:
         workflow = yaml.safe_load(f)
 
-    built_on_linux_64 = "win_64" if cross else "linux_64"
-    built_on_osx_arm64 = "win_arm64" if cross else "osx_arm64"
-    built_on_win_64 = "linux_64" if cross else "win_64"
-    built_on_win_arm64 = "osx_arm64" if cross else "win_arm64"
+    target_built_on_linux_64 = "win_64" if cross else "linux_64"
+    target_built_on_osx_arm64 = "win_arm64" if cross else "osx_arm64"
+    target_built_on_win_64 = "linux_64" if cross else "win_64"
+    target_built_on_win_arm64 = "osx_arm64" if cross else "win_arm64"
 
     expected = {
-        built_on_linux_64: ("~/miniforge3", "build_artifacts"),
-        built_on_osx_arm64: ("~/miniforge3", "~/miniforge3/conda-bld"),
-        built_on_win_arm64: (r"C:\Miniforge", r"C:\\bld\\"),
-        built_on_win_64: (
+        target_built_on_linux_64: ("~/miniforge3", "build_artifacts"),
+        target_built_on_osx_arm64: ("~/miniforge3", "~/miniforge3/conda-bld"),
+        target_built_on_win_arm64: (r"C:\Miniforge", r"C:\\bld\\"),
+        target_built_on_win_64: (
             (r"C:\Miniforge", r"C:\\bld\\")
             if (win64_label or "").startswith("blacksmith")
             else (r"D:\Miniforge", r"D:\\bld\\")
@@ -2974,21 +2974,21 @@ def test_tools_build_paths_azure(py_recipe, jinja_env, cross: bool):
         forge_dir=forge_dir,
     )
 
-    built_on_linux_64 = "win_64" if cross else "linux_64"
-    built_on_osx_arm64 = "win_arm64" if cross else "osx_arm64"
-    built_on_win_64 = "linux_64" if cross else "win_64"
-    built_on_win_arm64 = "osx_arm64" if cross else "win_arm64"
+    target_built_on_linux_64 = "win_64" if cross else "linux_64"
+    target_built_on_osx_arm64 = "win_arm64" if cross else "osx_arm64"
+    target_built_on_win_64 = "linux_64" if cross else "win_64"
+    target_built_on_win_arm64 = "osx_arm64" if cross else "win_arm64"
 
     expected = {
         "linux": {
-            built_on_linux_64: ("~/miniforge3", "build_artifacts"),
+            target_built_on_linux_64: ("~/miniforge3", "build_artifacts"),
         },
         "osx": {
-            built_on_osx_arm64: ("~/miniforge3", "~/miniforge3/conda-bld"),
+            target_built_on_osx_arm64: ("~/miniforge3", "~/miniforge3/conda-bld"),
         },
         "win": {
-            built_on_win_64: (r"D:\Miniforge", r"D:\\bld\\"),
-            built_on_win_arm64: (r"C:\Miniforge", r"C:\\bld\\"),
+            target_built_on_win_64: (r"D:\Miniforge", r"D:\\bld\\"),
+            target_built_on_win_arm64: (r"C:\Miniforge", r"C:\\bld\\"),
         },
     }
 
