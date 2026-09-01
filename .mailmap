@@ -13,8 +13,8 @@ Isuru Fernando <isuru.11@cse.mrt.ac.lk> Isuru Fernando <isuruf@gmail.com>
 Matthew R. Becker <becker.mr@gmail.com> Matthew R Becker <beckermr@users.noreply.github.com>
 Matthew R. Becker <becker.mr@gmail.com> beckermr <beckermr@users.noreply.github.com>
 Jaime Rodríguez-Guerra <jaimergp@users.noreply.github.com>
-H. Vetinari <h.vetinari@gmx.com>
 Michał Górny <mgorny@gentoo.org> Michał Górny <mgorny@quansight.com>
+H. Vetinari <h.vetinari@gmx.com>
 nichmor <nmorkotilo@gmail.com>
 Christopher J. Wright <cjwright4242gh@gmail.com> christopher <cjwright4242@gmail.com>
 Christopher J. Wright <cjwright4242gh@gmail.com> Christopher J. 'CJ' Wright <cjwright4242@gmail.com>
@@ -66,13 +66,13 @@ Jason Furmanek <furmanek@us.ibm.com>
 Patrick Sodré <psodre@gmail.com>
 Jan Lehnarsdt <jan@apache.org>
 C.A.M. Gerlach <widenetservices@gmail.com>
-refraction-ray <kcanamgal@foxmail.com>
-Leopold Talirz <leopold.talirz@gmail.com>
 Peter Williams <peter@newton.cx>
-Tom Pollard <tom.pollard@codethink.co.uk>
+refraction-ray <kcanamgal@foxmail.com>
 killua156 <71387616+killua156@users.noreply.github.com> Jean Paul R <jean@Jeans-MacBook-Pro.local>
 killua156 <71387616+killua156@users.noreply.github.com> Jean <jean@Jeans-MacBook-Pro.local>
 killua156 <71387616+killua156@users.noreply.github.com> Jean Paul <jean@Jeans-MacBook-Pro.local>
+Leopold Talirz <leopold.talirz@gmail.com>
+Tom Pollard <tom.pollard@codethink.co.uk>
 Gonzalo Pena-Castellanos <goanpeca@gmail.com>
 John Blischak <jdblischak@gmail.com>
 Matthias Diener <mdiener@illinois.edu>
@@ -105,6 +105,7 @@ Bruno Oliveira <nicoddemus@gmail.com>
 Tony Kelman <tony@kelman.net>
 Jannis Leidel <jannis@leidel.info>
 Matt Fisher <mfisher87@gmail.com>
+Bas Zalmstra <zalmstra.bas@gmail.com> Bas Zalmstra <4995967+baszalmstra@users.noreply.github.com>
 Guilherme Quentel Melo <gqmelo@gmail.com>
 santi <sdvillal@gmail.com>
 buijennifer <bui.jennifert@gmail.com>
@@ -128,6 +129,7 @@ Dominic Davis-Foster <dominic@davis-foster.co.uk>
 Anton Tetov <anton@tetov.se>
 Brandon Maier <brandon.maier@gmail.com>
 Ken Odegard <kodegard@anaconda.com>
+Dan Yeaw <dan@yeaw.me>
 Guillaume Fraux <luthaf@luthaf.fr> Guillaume Fraux <guillaume.fraux@epfl.ch>
 Lucas Colley <lucas.colley8@gmail.com>
 Jakov Smolić <jsmolic@quansight.com> Jakov Smolić <jsmolic@gentoo.org>
@@ -156,7 +158,6 @@ Benjamin Tovar <btovar@nd.edu>
 Sylvain Corlay <sylvain.corlay@gmail.com>
 Brandon Andersen <31670449+bandersen23@users.noreply.github.com>
 Vincenzo Eduardo Padulano <v.e.padulano@gmail.com>
-Bas Zalmstra <zalmstra.bas@gmail.com>
 Adam Ehlers Nyholm Thomsen <aen@atp.dk>
 Ralf Gommers <ralf.gommers@gmail.com>
 Matt Chan <49702524+thewchan@users.noreply.github.com>
@@ -167,7 +168,6 @@ Alfredo Luque <me@aluque.io>
 Philipp A. <flying-sheep@web.de>
 Andreas Poehlmann <ap--@users.noreply.github.com>
 James Myatt <james@jamesmyatt.co.uk>
-Dan Yeaw <dan@yeaw.me>
 Mikhail Ryazanov <MikhailRyazanov@users.noreply.github.com>
 Filippo Luca Ferretti <102977828+flferretti@users.noreply.github.com>
 Christoph Deil <Deil.Christoph@gmail.com>
@@ -177,3 +177,4 @@ pb01ka <gaganpb08singh@gmail.com>
 Ben Williams <benjaminhwilliams@users.noreply.github.com>
 Scott Wang <71915685+scott-5@users.noreply.github.com>
 Benjamin Bertrand <beenje@gmail.com>
+Sophia Castellarin <scastellarin@openteams.com>

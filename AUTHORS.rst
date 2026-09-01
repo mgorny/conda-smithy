@@ -4,8 +4,8 @@ Authors are sorted by number of commits.
 * Isuru Fernando
 * Matthew R. Becker
 * Jaime Rodríguez-Guerra
-* H. Vetinari
 * Michał Górny
+* H. Vetinari
 * nichmor
 * Christopher J. Wright
 * Anthony Scopatz
@@ -51,11 +51,11 @@ Authors are sorted by number of commits.
 * Patrick Sodré
 * Jan Lehnarsdt
 * C.A.M. Gerlach
-* refraction-ray
-* Leopold Talirz
 * Peter Williams
-* Tom Pollard
+* refraction-ray
 * killua156
+* Leopold Talirz
+* Tom Pollard
 * Gonzalo Pena-Castellanos
 * John Blischak
 * Matthias Diener
@@ -85,6 +85,7 @@ Authors are sorted by number of commits.
 * Tony Kelman
 * Jannis Leidel
 * Matt Fisher
+* Bas Zalmstra
 * Guilherme Quentel Melo
 * santi
 * buijennifer
@@ -108,6 +109,7 @@ Authors are sorted by number of commits.
 * Anton Tetov
 * Brandon Maier
 * Ken Odegard
+* Dan Yeaw
 * Guillaume Fraux
 * Lucas Colley
 * Jakov Smolić
@@ -136,7 +138,6 @@ Authors are sorted by number of commits.
 * Sylvain Corlay
 * Brandon Andersen
 * Vincenzo Eduardo Padulano
-* Bas Zalmstra
 * Adam Ehlers Nyholm Thomsen
 * Ralf Gommers
 * Matt Chan
@@ -147,7 +148,6 @@ Authors are sorted by number of commits.
 * Philipp A.
 * Andreas Poehlmann
 * James Myatt
-* Dan Yeaw
 * Mikhail Ryazanov
 * Filippo Luca Ferretti
 * Christoph Deil
@@ -157,3 +157,4 @@ Authors are sorted by number of commits.
 * Ben Williams
 * Scott Wang
 * Benjamin Bertrand
+* Sophia Castellarin
