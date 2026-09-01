@@ -53,25 +53,25 @@ description = "Debug {{ feedstock_name }} directly (without setup scripts), no p
 cmd = "{{ conda_build_tool }} build --recipe {{ recipe_dir }}"
 description = "Build {{ feedstock_name }} directly (without setup scripts), no particular variant specified"
 {%- endif %}
-{%- for variant in variants | sort %}
+{%- for variant_name, variant_config in variants | items %}
 {%- if conda_build_tool != "rattler-build" %}
 [feature.build.tasks."build-{{ variant }}"]
-cmd = "{{ conda_build_tool }} build {{ recipe_dir }} -m .ci_support/{{ variant }}.yaml --suppress-variables --clobber-file .ci_support/clobber_{{ variant }}.yaml"
-description = "Build {{ feedstock_name }} with variant {{ variant }} directly (without setup scripts)"
-[feature.build.tasks."debug-{{ variant }}"]
-cmd = "{{ conda_build_tool }} debug {{ recipe_dir }} -m .ci_support/{{ variant }}.yaml"
-description = "Debug {{ feedstock_name }} with variant {{ variant }} directly (without setup scripts)"
+cmd = "{{ conda_build_tool }} build {{ recipe_dir }} -m .ci_support/{{ variant_name }}.yaml --suppress-variables --clobber-file .ci_support/clobber_{{ variant_name }}.yaml"
+description = "Build {{ feedstock_name }} with variant {{ variant_name }} directly (without setup scripts)"
+[feature.build.tasks."debug-{{ variant_name }}"]
+cmd = "{{ conda_build_tool }} debug {{ recipe_dir }} -m .ci_support/{{ variant_name }}.yaml"
+description = "Debug {{ feedstock_name }} with variant {{ variant_name }} directly (without setup scripts)"
 {%- else %}
-[feature.build.tasks."build-{{ variant }}"]
-cmd = "{{ conda_build_tool }} build --recipe {{ recipe_dir }} -m .ci_support/{{ variant }}.yaml"
-description = "Build {{ feedstock_name }} with variant {{ variant }} directly (without setup scripts)"
-[feature.build.tasks."debug-{{ variant }}"]
-cmd = "{{ conda_build_tool }} debug setup --recipe {{ recipe_dir }} -m .ci_support/{{ variant }}.yaml"
-description = "Build {{ feedstock_name }} with variant {{ variant }} directly (without setup scripts)"
+[feature.build.tasks."build-{{ variant_name }}"]
+cmd = "{{ conda_build_tool }} build --recipe {{ recipe_dir }} -m .ci_support/{{ variant_name }}.yaml {{ variant_config['target_platform_flag'] }}"
+description = "Build {{ feedstock_name }} with variant {{ variant_name }} directly (without setup scripts)"
+[feature.build.tasks."debug-{{ variant_name }}"]
+cmd = "{{ conda_build_tool }} debug setup --recipe {{ recipe_dir }} -m .ci_support/{{ variant_name }}.yaml {{ variant_config['target_platform_flag'] }}"
+description = "Debug {{ feedstock_name }} with variant {{ variant_name }} directly (without setup scripts)"
 {%- endif %}
-[feature.build.tasks."inspect-{{ variant }}"]
-cmd = "inspect_artifacts --recipe-dir {{ recipe_dir }} -m .ci_support/{{ variant }}.yaml"
-description = "List contents of {{ feedstock_name }} packages built for variant {{ variant }}"
+[feature.build.tasks."inspect-{{ variant_name }}"]
+cmd = "inspect_artifacts --recipe-dir {{ recipe_dir }} -m .ci_support/{{ variant_name }}.yaml"
+description = "List contents of {{ feedstock_name }} packages built for variant {{ variant_name }}"
 {%- endfor %}
 
 [environments]
