@@ -4,6 +4,60 @@ conda-smithy Change Log
 
 .. current developments
 
+v2026.9.1
+====================
+
+**Added:**
+
+* Add `UnsupportedSchemaVersion`, `InvalidLicenseFamily`, `SectionHasInvalidType` as `LinterMessage`, which were previously strings. (#2651)
+
+**Changed:**
+
+* ``R1-004`` and ``R1-005`` accept more values for a "latest" ``python_version``. (#2645)
+* Artifacts on GitHub Actions are no longer packed into a second zip archive. (#2365)
+* Build and environment artifacts are now uploaded in ``.tar.zst`` format. (#2365)
+* The naming for artifacts from successful and failed builds is more consistent. (#2365)
+* Build artifacts and the work directory are now archived separately when ``store_build_artifacts`` is enabled. (#2365)
+* Partially created build artifacts are uploaded, with an explicit ``-broken`` suffix, for example when some files can't be read. (#2365)
+* The linter now distinguishes between single-output and multi-output v1 recipes when reporting unknown keys. (#2650)
+* Synced the bundled SPDX license list with upstream, adding
+  ``BSD-Source-Code-no-disclaimer`` and ``FDK-MPEG-H``.
+
+**Fixed:**
+
+* Linter rule R-052, ``RedundantPythonMin``, will not choke on Jinja redefinitions. (#2662)
+* Pass ``--target-platform`` to ``rattler-build`` in ``Pixi.toml`` tasks. (#2663)
+* Fix building locally on Windows fails to activate the base environment. (#2668 via #2667)
+* The ``hint_abi3_missing_abi3audit`` hint no longer fires when the
+  ``abi3audit`` test is nested inside an ``if``/``then`` block, such as a test
+  guarded by ``if: is_abi3``. The hint is also skipped for ``noarch: generic``
+  outputs, which ship no extension module for ``abi3audit`` to check.
+* The exclude patterns for artifact uploads no longer accidentally exclude files from work trees. (#2365)
+* Build artifacts and environments are now correctly split when using rattler-build. (#2365)
+* Build artifact creation no longer fails if one of the archives would end up empty, for example when the workflow failed on artifact validation. (#2365)
+* The ``pin_subpackage``/``pin_compatible`` lint now recovers the pinned package
+  name correctly when that name is built from a variant variable. Such names
+  cannot be resolved at lint time, and truncating the resulting template at its
+  first space made valid v1 recipes lint, and reported other pins under a
+  truncated name.
+* The linter no longer crashes on unexpected sections. (#2650)
+* The top-level ``tests`` keys are permitted in multi-output v1 recipes. (#2650)
+* Fix the default ``build_workspace_dir`` and ``tools_install_dir`` values for cross Unix-Windows builds, by basing them on the build platform rather than the target platform. (#2658)
+
+**Authors:**
+
+* Jaime Rodríguez-Guerra
+* Michał Górny
+* H. Vetinari
+* Nicholas Bollweg
+* Peter Williams
+* killua156
+* Bas Zalmstra
+* Dan Yeaw
+* Sophia Castellarin
+
+
+
 v2026.8.9
 ====================
 
