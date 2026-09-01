@@ -20,6 +20,7 @@ import pytest
 import conda_smithy.lint_recipe as linter
 from conda_smithy.linter import hints, update_licenses_list
 from conda_smithy.linter.conda_recipe_v1_linter import lint_recipe_tests
+from conda_smithy.linter.messages.recipe import SectionHasInvalidType
 from conda_smithy.linter.utils import (
     CONDA_BUILD_TOOL,
     RATTLER_BUILD_TOOL,
@@ -6681,6 +6682,18 @@ def test_license_files_up_to_date():
         update_licenses_list.update_license_exceptions(write=False)
         == original_exceptions.splitlines()
     ), "Run `python -m conda_smithy.linter.update_licenses_list` to sync license database"
+
+
+def test_invalid_type_lint_message():
+    section_invalid = SectionHasInvalidType(
+        name="section-name",
+        section_type="wrong.type",
+        allowed_types=["dictionary", "str", "list"],
+    )
+    assert (
+        str(section_invalid)
+        == 'The "section-name" section was expected to be a dictionary, str or a list, but got a wrong.type.'
+    )
 
 
 if __name__ == "__main__":

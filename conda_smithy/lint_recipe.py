@@ -18,6 +18,7 @@ import github.Organization
 import github.Team
 import jsonschema
 import requests
+from conda_build.license_family import allowed_license_families
 from conda_build.metadata import (
     ensure_valid_license_family,
 )
@@ -183,7 +184,11 @@ def lintify_meta_yaml(
     if recipe_version == 1:
         schema_version = meta.get("schema_version", 1)
         if schema_version != 1:
-            lints.append(f"Unsupported recipe.yaml schema version {schema_version}")
+            lints.append(
+                msg.r.UnsupportedSchemaVersion(
+                    schema_version=schema_version
+                ).as_string()
+            )
             return lints, hints
 
     sources_section = get_section(meta, "source", lints, recipe_version)
@@ -278,8 +283,13 @@ def lintify_meta_yaml(
     if recipe_version == 0:
         try:
             ensure_valid_license_family(meta)
-        except RuntimeError as e:
-            lints.append(str(e))
+        except RuntimeError:
+            lints.append(
+                msg.r.InvalidLicenseFamily(
+                    license_family=meta["about"].get("license_family", ""),
+                    allowed_license_families=allowed_license_families,
+                ).as_string()
+            )
 
     # 12a: License family must be valid (conda-build checks for that)
     license = about_section.get("license", "").lower()

@@ -1302,6 +1302,74 @@ class LegacyToolchain(LinterMessage, _MetaYamlMessage):
     )
 
 
+@dataclass(kw_only=True)
+class InvalidLicenseFamily(LinterMessage, _MetaYamlMessage):
+    """
+    conda-build checks for valid license families in v0 recipes.
+    """
+
+    kind = "lint"
+    identifier = "R0-007"
+    message = (
+        "about/license_family '${license_family}' not allowed. "
+        "Allowed families are ${allowed_license_families}."
+    )
+    allowed_license_families: list[str]
+    license_family: str
+    # This lint existed before 2026.9, but is introduced into the
+    # LinterMessage framework in 2026.9.
+    added_in = "2026.9"
+
+    def _render_attributes(self):
+        return {
+            "allowed_license_families": ", ".join(self.allowed_license_families),
+            "license_family": self.license_family,
+        }
+
+
+@dataclass(kw_only=True)
+class SectionHasInvalidType(LinterMessage, _MetaYamlMessage):
+    """
+    The given section must be a dictionary, a list, or either.
+    """
+
+    kind = "lint"
+    identifier = "R0-008"
+    message = (
+        'The "${name}" section was expected to be a ${allowed_types_formatted}, but '
+        "got a ${section_type}."
+    )
+    name: str
+    section_type: str
+    allowed_types: list[str]
+    # This lint existed before 2026.9, but is introduced into the
+    # LinterMessage framework in 2026.9.
+    added_in = "2026.9"
+
+    def _render_attributes(self):
+        if len(self.allowed_types) == 1:
+            allowed_types_formatted = self.allowed_types[0]
+        else:
+            allowed_types_formatted = (
+                ", ".join(self.allowed_types[:-1]) + " or a " + self.allowed_types[-1]
+            )
+        return {
+            "name": self.name,
+            "allowed_types_formatted": allowed_types_formatted,
+            "section_type": self.section_type,
+        }
+
+    @classmethod
+    def examples(cls) -> list[Self]:
+        return [
+            cls(name="build", section_type="str", allowed_types=["dictionary"]),
+            cls(
+                name="source", section_type="str", allowed_types=["dictionary", "list"]
+            ),
+            cls(name="outputs", section_type="dict", allowed_types=["list"]),
+        ]
+
+
 # endregion
 # region Recipe v1
 
@@ -1469,6 +1537,22 @@ class Abi3CrossPythonRunExports(LinterMessage, _RecipeYamlMessage):
         "      - cross-python_${{ target_platform }}\n"
         "```"
     )
+
+
+@dataclass(kw_only=True)
+class UnsupportedSchemaVersion(LinterMessage, _AnyRecipeMessage):
+    """
+    Recipe v1 (`recipe.yaml`) has a `schema_version` field that must be an integer.
+    The recipe must use a supported schema version.
+    """
+
+    kind = "lint"
+    identifier = "R1-008"
+    message = "Unsupported recipe.yaml schema version ${schema_version}"
+    schema_version: int
+    # This lint existed before 2026.9, but is introduced into the
+    # LinterMessage framework in 2026.9.
+    added_in = "2026.9"
 
 
 # endregion

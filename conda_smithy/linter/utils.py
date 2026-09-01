@@ -95,8 +95,11 @@ def get_meta_section(parent, name, lints):
     section = parent.get(name, {})
     if not isinstance(section, Mapping):
         lints.append(
-            f'The "{name}" section was expected to be a dictionary, but '
-            f"got a {type(section).__name__}."
+            msg.r.SectionHasInvalidType(
+                name=name,
+                section_type=type(section).__name__,
+                allowed_types=["dictionary"],
+            ).as_string()
         )
         section = {}
     return section
@@ -121,13 +124,14 @@ def get_list_section(parent, name, lints, allow_single=False):
     elif isinstance(section, Sequence) and not isinstance(section, str):
         return section
     else:
-        msg = 'The "{}" section was expected to be a {}list, but got a {}.{}.'.format(
-            name,
-            "dictionary or a " if allow_single else "",
-            type(section).__module__,
-            type(section).__name__,
+        section_type = f"{type(section).__module__}.{type(section).__name__}"
+        lints.append(
+            msg.r.SectionHasInvalidType(
+                name=name,
+                section_type=section_type,
+                allowed_types=["dictionary", "list"] if allow_single else ["list"],
+            ).as_string()
         )
-        lints.append(msg)
         return [{}]
 
 
