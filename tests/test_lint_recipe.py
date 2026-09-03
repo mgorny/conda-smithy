@@ -6707,6 +6707,7 @@ def test_redundant_build_platform_and_provider(tmp_path):
 
     cfyml.write_text(textwrap.dedent(r"""
         build_platform:
+          linux_64: linux_64
           linux_aarch64: linux_64
           osx_arm64: osx_64
           win_arm64: win_64
@@ -6720,6 +6721,8 @@ def test_redundant_build_platform_and_provider(tmp_path):
     lints, hints = linter.main(tmp_path, return_hints=True, conda_forge=True)
 
     expected = {
+        "Platform linux_64 specifies redundant build_platform=linux_64. Please "
+        "remove the unnecessary entry.",
         "Platform linux_aarch64 specifies both build_platform=linux_64 and "
         "provider=default. Use the former for cross-compilation or the latter "
         "for native build.",
@@ -6728,7 +6731,7 @@ def test_redundant_build_platform_and_provider(tmp_path):
         "latter for native build.",
     }
 
-    assert {x for x in lints if "provider" in x} == expected
+    assert {x for x in lints if x.startswith("Platform")} == expected
 
 
 if __name__ == "__main__":

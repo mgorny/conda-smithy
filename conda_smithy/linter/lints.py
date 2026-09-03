@@ -1244,7 +1244,13 @@ def lint_redundant_platform_definitions(
 
     providers = forge_config.get("provider", {})
     for platform, build_platform in forge_config.get("build_platform", {}).items():
-        if (provider := providers.get(platform)) is not None:
+        if platform == build_platform:
+            lints.append(
+                msg.cf.RedundantBuildPlatform(
+                    platform=platform,
+                ).as_string()
+            )
+        elif (provider := providers.get(platform)) is not None:
             lints.append(
                 msg.cf.RedundantBuildPlatformAndProvider(
                     platform=platform,
